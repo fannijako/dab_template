@@ -1,0 +1,45 @@
+# Replace <bundle-dir> below with the directory containing your databricks.yml.
+# If the bundle lives at the repo root, drop the `working-directory:` line and
+# change the path filter to something like 'databricks.yml' or 'resources/**'.
+name: Deploy to prod
+
+on:
+  push:
+    branches: [main, master]
+    paths:
+      - '<bundle-dir>/**'
+
+concurrency:
+  group: dab-prod
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    defaults:
+      run:
+        working-directory: <bundle-dir>
+    env:
+      DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+      DATABRICKS_CLIENT_ID: ${{ secrets.DATABRICKS_CLIENT_ID }}
+      DATABRICKS_CLIENT_SECRET: ${{ secrets.DATABRICKS_CLIENT_SECRET }}
+      BUNDLE_VAR_prod_sp_id: ${{ secrets.DATABRICKS_PROD_SP_ID }}
+      BUNDLE_VAR_alerts_email: ${{ secrets.ALERTS_EMAIL }}
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11'
+
+      - name: Install uv
+        run: pip install uv
+
+      - uses: databricks/setup-cli@bdb89f81c11a5bd647fd55b585b7c396ec68a25a # v1.0.0
+
+      - name: Validate bundle
+        run: databricks bundle validate --target prod
+
+      - name: Deploy bundle
+        run: databricks bundle deploy --target prod

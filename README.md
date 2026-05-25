@@ -110,7 +110,7 @@ EOF
 
 gh api -X PUT repos/<owner>/<repo>/actions/permissions/selected-actions --input - <<'EOF'
 {"github_owned_allowed": false, "verified_allowed": false,
- "patterns_allowed": ["actions/checkout@*", "actions/setup-python@*", "databricks/setup-cli@*"]}
+ "patterns_allowed": ["actions/checkout@*", "actions/setup-python@*", "astral-sh/setup-uv@*", "databricks/setup-cli@*"]}
 EOF
 ```
 
