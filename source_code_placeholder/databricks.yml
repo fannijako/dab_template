@@ -1,0 +1,40 @@
+bundle:
+  name: source_code_placeholder
+
+include:
+  - resources/*.yml
+
+artifacts:
+  python_artifact:
+    type: whl
+    build: uv build --wheel
+
+variables:
+  catalog:
+    description: The catalog to use
+  schema:
+    description: The schema to use
+  prod_sp_id:
+    description: Service principal application ID used by the prod target
+  alerts_email:
+    description: Address that receives job failure notifications
+
+targets:
+  dev:
+    mode: development
+    default: true
+    variables:
+      catalog: <your_catalog>
+      schema: dev
+    presets:
+      artifacts_dynamic_version: true
+  prod:
+    mode: production
+    variables:
+      catalog: <your_catalog>
+      schema: prod
+    run_as:
+      service_principal_name: ${var.prod_sp_id}
+    permissions:
+      - service_principal_name: ${var.prod_sp_id}
+        level: CAN_MANAGE

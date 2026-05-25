@@ -1,0 +1,15 @@
+# Replace <your_catalog> with the Unity Catalog name the SP has USE CATALOG on.
+resources:
+  schemas:
+    dev:
+      catalog_name: <your_catalog>
+      name: dev
+      comment: Development schema. Used by dev targets of app bundles.
+      lifecycle:
+        prevent_destroy: true
+    prod:
+      catalog_name: <your_catalog>
+      name: prod
+      comment: Production schema. Used by prod targets of app bundles.
+      lifecycle:
+        prevent_destroy: true

@@ -1,13 +1,14 @@
-# Replace <bundle-dir> below with the directory containing your databricks.yml.
-# If the bundle lives at the repo root, drop the `working-directory:` line and
-# change the path filter to something like 'databricks.yml' or 'resources/**'.
+# `source_code_placeholder/` is a skeleton — rename the directory and the
+# references below (path filter + working-directory) once the workload bundle
+# has a real name. If the bundle lives at the repo root, drop `working-directory:`
+# and change the path filter to match (e.g. `databricks.yml`, `resources/**`).
 name: Deploy to dev
 
 on:
   pull_request:
     branches: [main, master]
     paths:
-      - '<bundle-dir>/**'
+      - 'source_code_placeholder/**'
 
 concurrency:
   group: dab-dev
@@ -18,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: <bundle-dir>
+        working-directory: source_code_placeholder
     env:
       DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
       DATABRICKS_CLIENT_ID: ${{ secrets.DATABRICKS_CLIENT_ID }}

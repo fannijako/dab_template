@@ -1,0 +1,18 @@
+bundle:
+  name: data_catalog_infra
+
+include:
+  - resources/*.yml
+
+variables:
+  bundle_owner_email:
+    description: Owner email — sets root_path and CAN_MANAGE permission
+
+targets:
+  default:
+    default: true
+    workspace:
+      root_path: /Workspace/Users/${var.bundle_owner_email}/.bundle/${bundle.name}
+    permissions:
+      - user_name: ${var.bundle_owner_email}
+        level: CAN_MANAGE

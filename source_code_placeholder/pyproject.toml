@@ -1,0 +1,12 @@
+[project]
+name = "source_code_placeholder"
+version = "0.0.1"
+requires-python = ">=3.10,<3.13"
+dependencies = []
+
+[project.scripts]
+main = "source_code_placeholder:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

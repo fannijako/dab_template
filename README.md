@@ -181,7 +181,6 @@ gh api -X PUT repos/<owner>/<repo>/actions/permissions/fork-pr-contributor-appro
 make lint          # ruff check
 make format        # ruff format (in place)
 make format-check  # ruff format --check
-make test          # pytest with coverage
-make run           # python main.py
+make pre-commit    # run all pre-commit hooks
 make clean         # remove .venv and caches
 ```

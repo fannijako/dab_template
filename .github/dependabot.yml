@@ -18,9 +18,7 @@ updates:
       dev-dependencies:
         patterns:
           - "ruff"
-          - "mypy"
           - "pre-commit"
-          - "pytest*"
 
   - package-ecosystem: "github-actions"
     directory: "/"
