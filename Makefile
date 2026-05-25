@@ -1,4 +1,4 @@
-.PHONY = sync lock lint format format-check typecheck test pre-commit run clean
+.PHONY = sync lock lint format format-check typecheck test pre-commit clean
 
 sync:
 	uv sync --all-groups
@@ -16,22 +16,22 @@ format-check:
 	uv run ruff format --check .
 
 typecheck:
-	uv run mypy
+	cd source_code_placeholder && uv run mypy
 
 test:
-	uv run pytest
+	cd source_code_placeholder && uv run pytest
 
 pre-commit:
 	uv run pre-commit run --all-files
 
-run:
-	uv run python main.py
-
 clean:
 	rm -rf .venv
+	rm -rf source_code_placeholder/.venv
 	rm -rf __pycache__
 	rm -rf */__pycache__
-	rm -rf .pytest_cache
 	rm -rf .ruff_cache
+	rm -rf .pytest_cache
 	rm -rf .mypy_cache
+	rm -rf source_code_placeholder/.pytest_cache
+	rm -rf source_code_placeholder/.mypy_cache
 	rm -rf *.egg-info

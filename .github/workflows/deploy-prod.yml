@@ -1,0 +1,66 @@
+# `source_code_placeholder/` is a skeleton — rename the directory and the
+# references below (path filter + working-directory) once the workload bundle
+# has a real name. If the bundle lives at the repo root, drop `working-directory:`
+# and change the path filter to match (e.g. `databricks.yml`, `resources/**`).
+name: Deploy to prod
+
+on:
+  push:
+    branches: [main, master]
+    paths:
+      - 'source_code_placeholder/**'
+
+concurrency:
+  group: dab-prod
+  cancel-in-progress: false
+
+jobs:
+  # Skip the deploy job until DATABRICKS_HOST is set on the repo. Keeps the
+  # template (and freshly-created repos pre-secrets-setup) from failing CI.
+  check:
+    runs-on: ubuntu-latest
+    outputs:
+      configured: ${{ steps.check.outputs.configured }}
+    env:
+      DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+    steps:
+      - id: check
+        run: |
+          if [ -z "$DATABRICKS_HOST" ]; then
+            echo "::notice::DATABRICKS_HOST not set — skipping deploy. Configure repo secrets per README to enable."
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+          fi
+
+  deploy:
+    needs: check
+    if: needs.check.outputs.configured == 'true'
+    runs-on: ubuntu-latest
+    environment: production
+    defaults:
+      run:
+        working-directory: source_code_placeholder
+    env:
+      DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+      DATABRICKS_CLIENT_ID: ${{ secrets.DATABRICKS_CLIENT_ID }}
+      DATABRICKS_CLIENT_SECRET: ${{ secrets.DATABRICKS_CLIENT_SECRET }}
+      BUNDLE_VAR_prod_sp_id: ${{ secrets.DATABRICKS_PROD_SP_ID }}
+      BUNDLE_VAR_alerts_email: ${{ secrets.ALERTS_EMAIL }}
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11'
+
+      - name: Install uv
+        run: pip install uv
+
+      - uses: databricks/setup-cli@bdb89f81c11a5bd647fd55b585b7c396ec68a25a # v1.0.0
+
+      - name: Validate bundle
+        run: databricks bundle validate --target prod
+
+      - name: Deploy bundle
+        run: databricks bundle deploy --target prod

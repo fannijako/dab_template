@@ -1,46 +1,16 @@
-[build-system]
-requires = ["poetry-core>=2.0.0"]
-build-backend = "poetry.core.masonry.api"
-
 [project]
-name = "repo_template"
-version = "0.1.0"
-description = "Repository template for my Python projects"
-readme = "README.md"
+name = "dab-template"
+version = "0.0.0"
 requires-python = ">=3.10"
-authors = [{ name = "Fanni Jako", email = "fannijako@gmail.com" }]
 dependencies = []
 
-[project.optional-dependencies]
-test = [
-    "pytest>=8.4.1",
-    "pytest-cov>=5.0.0",
-]
-dev = [
-    "ruff>=0.6.0",
-    "mypy>=1.11.0",
-    "pre-commit>=3.7.0",
-]
-build = [
-    "build>=1.2.0",
-    "twine>=5.1.0",
-]
-
-[project.urls]
-Homepage = "https://github.com/fannijako/repo_template"
-
-[tool.poetry]
-packages = [{ include = "src" }]
+[tool.uv]
+package = false
 
 [dependency-groups]
 dev = [
     "ruff>=0.6.0",
-    "mypy>=1.11.0",
     "pre-commit>=3.7.0",
-]
-test = [
-    "pytest>=8.4.1",
-    "pytest-cov>=5.0.0",
 ]
 
 [tool.ruff]
@@ -50,20 +20,3 @@ extend-exclude = [".venv"]
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "B", "UP"]
-
-[tool.mypy]
-python_version = "3.10"
-files = ["src", "main.py"]
-strict = true
-warn_unused_configs = true
-warn_redundant_casts = true
-warn_unused_ignores = true
-disallow_untyped_defs = true
-no_implicit_optional = true
-show_error_codes = true
-pretty = true
-exclude = ["^\\.venv/", "^build/", "^dist/"]
-
-[tool.pytest.ini_options]
-testpaths = ["test"]
-addopts = "--cov=src --cov-report=term-missing"
