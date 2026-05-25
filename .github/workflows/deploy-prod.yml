@@ -15,7 +15,27 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # Skip the deploy job until DATABRICKS_HOST is set on the repo. Keeps the
+  # template (and freshly-created repos pre-secrets-setup) from failing CI.
+  check:
+    runs-on: ubuntu-latest
+    outputs:
+      configured: ${{ steps.check.outputs.configured }}
+    env:
+      DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+    steps:
+      - id: check
+        run: |
+          if [ -z "$DATABRICKS_HOST" ]; then
+            echo "::notice::DATABRICKS_HOST not set — skipping deploy. Configure repo secrets per README to enable."
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+          fi
+
   deploy:
+    needs: check
+    if: needs.check.outputs.configured == 'true'
     runs-on: ubuntu-latest
     environment: production
     defaults:
