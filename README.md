@@ -178,9 +178,11 @@ gh api -X PUT repos/<owner>/<repo>/actions/permissions/fork-pr-contributor-appro
 ## Common tasks
 
 ```bash
-make lint          # ruff check
-make format        # ruff format (in place)
-make format-check  # ruff format --check
+make lint          # ruff check (repo-wide)
+make format        # ruff format (in place, repo-wide)
+make format-check  # ruff format --check (repo-wide)
+make typecheck     # mypy on source_code_placeholder/
+make test          # pytest with coverage on source_code_placeholder/
 make pre-commit    # run all pre-commit hooks
 make clean         # remove .venv and caches
 ```

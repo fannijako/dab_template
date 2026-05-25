@@ -20,6 +20,26 @@ updates:
           - "ruff"
           - "pre-commit"
 
+  - package-ecosystem: "pip"
+    directory: "/source_code_placeholder"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "Europe/Berlin"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "python"
+    commit-message:
+      prefix: "deps"
+      include: "scope"
+    groups:
+      dev-dependencies:
+        patterns:
+          - "mypy"
+          - "pytest*"
+
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
