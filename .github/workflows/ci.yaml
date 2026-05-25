@@ -64,6 +64,10 @@ jobs:
   test:
     name: Test (pytest)
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
     defaults:
       run:
         working-directory: source_code_placeholder
@@ -73,9 +77,9 @@ jobs:
         uses: astral-sh/setup-uv@caf0cab7a618c569241d31dcd442f54681755d39 # v3
         with:
           enable-cache: true
-      - name: Set up Python
-        run: uv python install 3.11
+      - name: Set up Python ${{ matrix.python-version }}
+        run: uv python install ${{ matrix.python-version }}
       - name: Install dependencies
-        run: uv sync --all-groups
+        run: uv sync --all-groups --python ${{ matrix.python-version }}
       - name: Run pytest
-        run: uv run pytest
+        run: uv run --python ${{ matrix.python-version }} pytest

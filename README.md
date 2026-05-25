@@ -17,7 +17,7 @@ Use this as a starting point when you want:
 
 Toolchain:
 - **[uv](https://docs.astral.sh/uv/)** — environment & dependency management
-- **[poetry-core](https://python-poetry.org/)** — PEP 517 build backend
+- **[hatchling](https://hatch.pypa.io/latest/)** — PEP 517 build backend (workload bundle wheel)
 - **[ruff](https://docs.astral.sh/ruff/)** — linting & formatting
 - **pytest** — testing
 - **[databricks CLI](https://docs.databricks.com/dev-tools/cli/databricks-cli.html)** — bundle deploys and workspace auth
